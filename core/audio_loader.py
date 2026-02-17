@@ -29,10 +29,11 @@ class YTDLSource(discord.PCMVolumeTransformer):
         'source_address': '0.0.0.0',
     }
 
-    # Only use cookies if the file exists
+    # Authentication: prefer browser cookies (always fresh), fallback to file
+    YTDL_OPTIONS['cookiesfrombrowser'] = ('chrome',)
     if os.path.exists('cookies.txt'):
         YTDL_OPTIONS['cookiefile'] = 'cookies.txt'
-
+        logger.info(f"Cookies utilizados")
     FFMPEG_OPTIONS: dict = {
         'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5',
         'options': '-vn',
