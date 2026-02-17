@@ -3,12 +3,13 @@ import yt_dlp
 import asyncio
 import functools
 import typing
+import os
 import logging
 
 logger = logging.getLogger(__name__)
 
 # Suppress noise about console usage from errors
-yt_dlp.utils.bug_reports_message = lambda: ''
+yt_dlp.utils.bug_reports_message = lambda *args, **kwargs: ''
 
 
 class YTDLSource(discord.PCMVolumeTransformer):
@@ -16,8 +17,6 @@ class YTDLSource(discord.PCMVolumeTransformer):
 
     YTDL_OPTIONS: dict = {
         'format': 'bestaudio/best',
-        'extractaudio': True,
-        'audioformat': 'mp3',
         'outtmpl': '%(extractor)s-%(id)s-%(title)s.%(ext)s',
         'restrictfilenames': True,
         'noplaylist': True,
@@ -26,9 +25,13 @@ class YTDLSource(discord.PCMVolumeTransformer):
         'logtostderr': False,
         'quiet': True,
         'no_warnings': True,
-        'default_search': 'auto',
+        'default_search': 'ytsearch',
         'source_address': '0.0.0.0',
     }
+
+    # Only use cookies if the file exists
+    if os.path.exists('cookies.txt'):
+        YTDL_OPTIONS['cookiefile'] = 'cookies.txt'
 
     FFMPEG_OPTIONS: dict = {
         'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5',
