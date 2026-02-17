@@ -30,7 +30,7 @@ class YTDLSource(discord.PCMVolumeTransformer):
     }
 
     # Authentication: prefer browser cookies (always fresh), fallback to file
-    YTDL_OPTIONS['cookiesfrombrowser'] = ('chrome',)
+    YTDL_OPTIONS['cookiesfrombrowser'] = ('firefox',)
     if os.path.exists('cookies.txt'):
         YTDL_OPTIONS['cookiefile'] = 'cookies.txt'
         logger.info(f"Cookies utilizados")
